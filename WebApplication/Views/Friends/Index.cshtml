@@ -1,0 +1,31 @@
+﻿@model IEnumerable<WebApplication.Models.FriendViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table>
+    @foreach (var amigo in Model)
+    {
+        <tr>
+            <th>Id:</th>
+            <td>@amigo.Id</td>
+        </tr>
+        <tr>
+            <th>First Name:</th>
+            <td>@amigo.FirstName</td>
+        </tr>
+        <tr>
+            <th>Last Name: </th>
+            <td>@amigo.LastName</td>
+        </tr>
+        <tr>
+            <th>BirthDate: </th>
+            <td>@amigo.BirthDate</td>
+        </tr>
+    }
+
+</table>
+
