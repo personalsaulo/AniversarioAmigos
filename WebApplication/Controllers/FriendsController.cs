@@ -1,31 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication.Domain;
 using WebApplication.Models;
 using WebApplication.Repository;
+using WebApplication.Repository.Conexao;
 
 namespace WebApplication.Controllers
 {
     public class FriendsController : Controller
     {
         // GET: Friends
+        private static FriendRepository repository = new FriendRepository();
         public ActionResult Index()
         {
-            var repository = new FriendRepository();
-            var friends = repository.GetAllTodaysBirthdays();
+            var listaOrdenada = repository.GetAllFriends()
+                                .OrderByDescending(o => DateTime.Now.Subtract(
+                                 new DateTime(DateTime.Now.Year, o.BirthDate.Month, o.BirthDate.Day))
+                                 .TotalSeconds).ToList();
 
+            return View(listaOrdenada);
+        }
 
-            return View(
-                friends.Select(a => new FriendViewModel
-                {
-                    Id = a.FriendId,
-                    FirstName = a.FirstName,
-                    LastName = a.LastName,
-                    BirthDate = a.BirthDate
-                }));
+        public ViewResult Search(string name = "")
+        {
+            var lista = repository.GetOneFriendByName(name);
+            return View(lista);
         }
 
         // GET: Friends/Details/5
@@ -37,48 +41,33 @@ namespace WebApplication.Controllers
         // GET: Friends/Create
         public ActionResult Create()
         {
-         
             return View();
         }
 
         // POST: Friends/Create
         [HttpPost]
-        public ActionResult Create(FriendViewModel friend)
+        public RedirectToRouteResult Create(FriendViewModel friend)
         {
-            try
-            {
-                var repository = new FriendRepository();
-                FriendViewModel newFriend = new FriendViewModel();
-                newFriend.Id = friend.Id;
-                newFriend.FirstName = friend.FirstName;
-                newFriend.LastName = friend.LastName;
-                newFriend.BirthDate = friend.BirthDate;
+            var repository = new FriendRepository();
 
-                repository.InsertFriends(newFriend);
-                
-                
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View(friend);
-            }
+            repository.InsertFriends(friend);
+            return RedirectToAction("Index");
         }
 
         // GET: Friends/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            return View(repository.GetOneFriendById(id));
         }
 
         // POST: Friends/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(FriendViewModel _friendViewModel, FormCollection collection)
         {
             try
             {
                 // TODO: Add update logic here
-
+                repository.UpdateAFriend(_friendViewModel);
                 return RedirectToAction("Index");
             }
             catch
@@ -90,7 +79,7 @@ namespace WebApplication.Controllers
         // GET: Friends/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            return View(repository.GetOneFriendById(id));
         }
 
         // POST: Friends/Delete/5
@@ -100,7 +89,7 @@ namespace WebApplication.Controllers
             try
             {
                 // TODO: Add delete logic here
-
+                repository.DeleteAFriendById(id);
                 return RedirectToAction("Index");
             }
             catch

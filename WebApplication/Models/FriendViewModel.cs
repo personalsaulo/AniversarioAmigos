@@ -7,7 +7,7 @@ namespace WebApplication.Models
 {
     public class FriendViewModel
     {
-        public int Id { get; set; }
+        public int FriendId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }

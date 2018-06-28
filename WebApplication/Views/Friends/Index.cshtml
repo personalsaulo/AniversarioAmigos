@@ -2,30 +2,97 @@
 
 @{
     ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Index</h2>
 
-<table>
-    @foreach (var amigo in Model)
-    {
-        <tr>
-            <th>Id:</th>
-            <td>@amigo.Id</td>
-        </tr>
-        <tr>
-            <th>First Name:</th>
-            <td>@amigo.FirstName</td>
-        </tr>
-        <tr>
-            <th>Last Name: </th>
-            <td>@amigo.LastName</td>
-        </tr>
-        <tr>
-            <th>BirthDate: </th>
-            <td>@amigo.BirthDate</td>
-        </tr>
-    }
 
+<h3>Next Birthdays:</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(model => model.FirstName)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.LastName)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.BirthDate)</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                <td>@item.BirthDate.ToString("dd/MM")</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.FriendId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.FriendId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.FriendId })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(model => model.FirstName)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.LastName)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.BirthDate)</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            DateTime dt = DateTime.Today;
+            if (item.BirthDate.Day == dt.Day && item.BirthDate.Month == dt.Month)
+            {
+                <tr>
+                    <td> @Html.DisplayFor(modelItem => item.FirstName) </td>
+                    <td> @Html.DisplayFor(modelItem => item.LastName) </td>
+                    <td> @item.BirthDate.ToString("dd/MM") </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.FriendId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.FriendId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.FriendId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(model => model.FirstName)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.LastName)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.BirthDate)</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                <td>@item.BirthDate.ToString("dd/MM")</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.FriendId }) |
+                    @Html.ActionLink("Details", "Detail", new { id = item.FriendId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.FriendId })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p>
+    @Html.ActionLink("Add a Friend", "Create")
+</p>
+<p>
+    @Html.ActionLink("Search", "Search", new { name = "" })
+</p>

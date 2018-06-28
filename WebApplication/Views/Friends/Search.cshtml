@@ -1,0 +1,50 @@
+﻿@model IEnumerable<WebApplication.Models.FriendViewModel>
+
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form action="/Friends/Search" method="GET">
+    <div class="form-group">
+        <label for="nome">First Name</label>
+        <input type="text" class="form-control" name="FirstName" id="FirstName" placeholder="put a name">
+        <small class="form-text text-muted">Busque pelo o nome do seu amigo.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+
+<br />
+
+<h2>Search</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(model => model.FirstName)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.LastName)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.BirthDate)</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td> @Html.DisplayFor(modelItem => item.FirstName) </td>
+                <td> @Html.DisplayFor(modelItem => item.LastName) </td>
+                <td> @item.BirthDate.ToString("dd/MM") </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.FriendId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.FriendId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.FriendId })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+
+<div>
+    @Html.ActionLink("Voltar", "Index")
+</div>
